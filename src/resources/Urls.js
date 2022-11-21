@@ -8,6 +8,6 @@ const baseApi = {
 // this is a exmple data for enpoint api
 export const Urls = {
 	searchApi: {
-		searching: baseApi.search + 'search/'
+		searching: baseApi.search + 'search'
 	}
 };
