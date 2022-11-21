@@ -43,9 +43,9 @@ li{
   letter-spacing: 0;
   padding: 30px;
   list-style: none;
-  min-height: 150px;
+  min-height: 100px;
   background: #fff;
-  margin: 50px auto;
+  margin: 20px auto;
   text-align: left;
   -webkit-transition: box-shadow .2s ease-out .2s;
   -moz-transition: box-shadow .2s ease-out .2s;

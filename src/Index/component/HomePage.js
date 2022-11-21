@@ -17,9 +17,8 @@ class HomePageComponent extends React.Component {
 	}
 
 	showResults = () => {
-		console.log("xd", this.state.results);
 		return this.state.results.map(items =>
-			<a href={items[0]} target="_blank" rel="noreferrer" className='text-decoration-none'>
+			<a key={items[3]} href={items[0]} target="_blank" rel="noreferrer" className='text-decoration-none'>
 				<li>
 					<h3>{items[1] !== 'URL' ? '['+items[1]+']' : ''} {items[3]}</h3>
 				</li>

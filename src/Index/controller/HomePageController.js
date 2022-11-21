@@ -1,5 +1,4 @@
 import { Urls } from '../../resources/Urls';
-import { Client } from '../../resources/Client';
 export class HomePageController { 
 	async sendText(text) {
 		const respuesta = await fetch(Urls.searchApi.searching, {
