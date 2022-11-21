@@ -19,9 +19,9 @@ class HomePageComponent extends React.Component {
 	showResults = () => {
 		console.log("xd", this.state.results);
 		return this.state.results.map(items =>
-			<a href={items[0]} target="_blank" rel="noreferrer">
+			<a href={items[0]} target="_blank" rel="noreferrer" className='text-decoration-none'>
 				<li>
-					<h3>{items[1] !== 'URL' ? items[1] : ''} {items[3]}</h3>
+					<h3>{items[1] !== 'URL' ? '['+items[1]+']' : ''} {items[3]}</h3>
 				</li>
 			</a>
 		)
@@ -31,20 +31,17 @@ class HomePageComponent extends React.Component {
 		const searchButton = document.getElementById('searchBar');
 		const container = document.getElementById('container');
 		const searchBox = document.getElementById('searchBox');
-		console.log(searchButton.value);
-		//keyword = searchBar.val();
-		//resultArea.empty();
-		//footer.empty();
-		//displayResults();
+
 		searchBox.style.paddingTop = "5vh";
 		container.style.height = "30vh";
 		
 		const data = {
-			'search': searchButton.value
+			"search": searchButton.value
 		}
 		const res = await this.homePageController.sendText(data);
+
 		this.setState({
-			results: res
+			results: res.data
 		})
 	}
 
@@ -52,27 +49,6 @@ class HomePageComponent extends React.Component {
 
 		return (
 			<div>
-				{/* 
-			<div className="container">
-    			<br/>
-				<div className="row justify-content-center">
-                        <div className="col-12 col-md-10 col-lg-8">
-                            <form className="card card-sm">
-                                <div className="card-body row no-gutters align-items-center">
-                                    <div className="col-auto">
-                                        <i className="fas fa-search h4 text-body"></i>
-                                    </div>
-                                    <div className="col">
-                                        <input className="form-control form-control-lg form-control-borderless" type="search" placeholder="Ingresa una palabra o frase"/>
-                                    </div>
-                                    <div className="col-auto">
-                                        <button className="btn btn-lg btn-success" type="submit">Buscar</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-			</div>*/}
 				<header id="container" className="container-fluid" >
 					<div className="container text-center" id="searchBox">
 						<h1>Buscador Python</h1>
