@@ -167,7 +167,7 @@ export class Utils {
 		);
 	}
 
-	static maxFech() {
+	/*static maxFech() {
 		let fecha = new Date; 
 		const dd = (fecha.getDate() < 10) ?  `0${fecha.getDate()}`: fecha.getDate();
 		const mm = ((fecha.getMonth()+1) < 10) ?  `0${fecha.getMonth()+1}`: fecha.getMonth()+1;
@@ -184,7 +184,7 @@ export class Utils {
 		const yyyy = fecha.getFullYear()-100;
 		fecha = `${yyyy}-${mm}-${dd}`;
 		return fecha;
-	}
+	}*/
 }
 
 export const deleteLastOneObject = (obj = {})=>{
