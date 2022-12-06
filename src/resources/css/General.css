@@ -146,6 +146,7 @@ li:hover{
 
 #mainBody{
   font-family: 'Montserrat', sans-serif;
+  display: none;
 }
 
 /*********media query starts ***********/
@@ -172,4 +173,18 @@ li:hover{
   z-index: 1000;
   position: absolute;
   display: none;
+}
+
+.btn-lg{
+  color: rgb(204, 83, 83);
+}
+
+.nav-link.active{
+  background-color: #39404A !important; 
+}
+
+.img-thumbnail{
+  object-fit: cover !important;
+  min-width: 40vw !important;
+  height: 40vw !important;
 }
