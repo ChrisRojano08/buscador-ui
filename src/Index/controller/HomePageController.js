@@ -1,7 +1,24 @@
 import { Urls } from '../../resources/Urls';
 export class HomePageController { 
-	async sendText(text) {
-		const respuesta = await fetch(Urls.searchApi.searching, {
+	async sendText(text, typeS) {
+		let url = Urls.searchApi.searching
+
+		switch(typeS){
+			case 'videos':
+				url = Urls.searchApi.videos
+			break;
+			case 'compras':
+				url = Urls.searchApi.shops
+			break;
+			case 'documentos':
+				url = Urls.searchApi.pdfs
+			break;
+			case 'imagenes':
+				url = Urls.searchApi.images
+			break;
+		}
+
+		const respuesta = await fetch(url, {
 			'method': 'POST',
 			headers: {
 			  'Content-Type': 'application/json'
