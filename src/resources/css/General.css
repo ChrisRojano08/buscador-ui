@@ -183,8 +183,8 @@ li:hover{
   background-color: #39404A !important; 
 }
 
-.img-thumbnail{
+.imgRes{
   object-fit: cover !important;
-  min-width: 40vw !important;
-  height: 40vw !important;
+  width: 300px;
+  height: auto;
 }

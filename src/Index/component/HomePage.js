@@ -15,7 +15,10 @@ class HomePageComponent extends React.Component {
 			results: [['1', '2', 0, '4', ['','']]],
 			info: 'NAN',
 			type: 'otros',
-			items: 0
+			search: '',
+			page: 0,
+			items: 0,
+			total: 0
 		};
 	}
 
@@ -83,11 +86,12 @@ class HomePageComponent extends React.Component {
 									rowHeight="auto"
 								>
 									{this.state.results.map(item =>
-										<a className='border' href={item[0]} target="_blank" key={iKey++}>
+										<a className='border' href={item[0]} target="_blank" rel="noreferrer" key={iKey++}>
 											<ImageListItem key={item[2]} cols={item.cols || 1} rows={item.rows || 1}>
 											<img src={item[2]}
 											loading="lazy"
-											alt={item[0]}
+											className='imgRes'
+											alt='waos'
 											/>
 									  	</ImageListItem>
 										</a>
@@ -103,61 +107,72 @@ class HomePageComponent extends React.Component {
 
 	}
 
-	async searchButtonAction(typeSearch) {
-		document.getElementById('mainBody').style.display = "block"
+	handleChange = (e) => {
+		this.setState({search: e.target.value});
+	};
 
-		const searchButton = document.getElementById('searchBar');
+	async searchButtonAction(typeSearch, pageN) {
+		document.getElementById('mainBody').style.display = "block";
 		const container = document.getElementById('container');
 		const searchBox = document.getElementById('searchBox');
 
 		searchBox.style.paddingTop = "5vh";
 		container.style.height = "30vh";
 
-		const data = {
-			"search": searchButton.value
-		}
-
-		this.setState({ info: 'NAN' });
-		document.getElementById('chargging_panel').style.display = "block";
-
-		let typeSH = 'otros';
-		document.getElementById('v-pills-todos').className = "nav-link my-2 btn-lg";
-		document.getElementById('v-pills-imagenes').className = "nav-link my-2 btn-lg";
-		document.getElementById('v-pills-videos').className = "nav-link my-2 btn-lg";
-		document.getElementById('v-pills-compras').className = "nav-link my-2 btn-lg";
-		document.getElementById('v-pills-documentos').className = "nav-link my-2 btn-lg";
-		switch(typeSearch){
-			case 'all':
-				document.getElementById('v-pills-todos').className = "nav-link my-2 btn-lg active";
-			break;
-			case 'videos':
-				document.getElementById('v-pills-videos').className = "nav-link my-2 btn-lg active";
-			break;
-			case 'compras':
-				document.getElementById('v-pills-compras').className = "nav-link my-2 btn-lg active";
-			break;
-			case 'documentos':
-				document.getElementById('v-pills-documentos').className = "nav-link my-2 btn-lg active";
-			break;
-			case 'imagenes':
-				document.getElementById('v-pills-imagenes').className = "nav-link my-2 btn-lg active";
-				typeSH = 'imagenes';
-			break;
-		}
-		
-		const res = await this.homePageController.sendText(data, typeSearch);
-		
-		document.getElementById('chargging_panel').style.display = "none";
-		this.setState({
-			results: res.data,
-			info: res.time,
-			type: typeSH
-		})
+		this.setState({ page: pageN }, async ()=>{
+			const data = {
+				"search": this.state.search,
+				"page": this.state.page
+			}
+			
+			console.log(data)
+	
+			this.setState({ info: 'NAN' });
+			document.getElementById('chargging_panel').style.display = "block";
+	
+			let typeSH = 'otros';
+			document.getElementById('v-pills-todos').className = "nav-link my-2 btn-lg";
+			document.getElementById('v-pills-imagenes').className = "nav-link my-2 btn-lg";
+			document.getElementById('v-pills-videos').className = "nav-link my-2 btn-lg";
+			document.getElementById('v-pills-compras').className = "nav-link my-2 btn-lg";
+			document.getElementById('v-pills-documentos').className = "nav-link my-2 btn-lg";
+			switch(typeSearch){
+				case 'all':
+					document.getElementById('v-pills-todos').className = "nav-link my-2 btn-lg active";
+				break;
+				case 'videos':
+					document.getElementById('v-pills-videos').className = "nav-link my-2 btn-lg active";
+				break;
+				case 'compras':
+					document.getElementById('v-pills-compras').className = "nav-link my-2 btn-lg active";
+				break;
+				case 'documentos':
+					document.getElementById('v-pills-documentos').className = "nav-link my-2 btn-lg active";
+				break;
+				case 'imagenes':
+					document.getElementById('v-pills-imagenes').className = "nav-link my-2 btn-lg active";
+					typeSH = 'imagenes';
+				break;
+				default:
+					typeSH = 'otros';
+				break;
+			}
+			
+			const res = await this.homePageController.sendText(data, typeSearch);
+			
+			document.getElementById('chargging_panel').style.display = "none";
+			this.setState({
+				results: res.data,
+				info: res.time,
+				type: typeSH,
+				total: res.total
+			})
+		});
 	}
 
 	handleKeyDown = event =>{
 		if(event.key === 'Enter'){
-			this.searchButtonAction('all')
+			this.searchButtonAction('all', 1)
 		}
 	}
 
@@ -174,10 +189,11 @@ class HomePageComponent extends React.Component {
 								type="text"
 								placeholder="search"
 								onKeyDown={this.handleKeyDown}
+								onChange={this.handleChange}
 							/>
 
 							<span className="fas fa-search col-xs-1" data-toggle="tooltip" title="Search"
-								onClick={() => this.searchButtonAction('all')}></span>
+								onClick={() => this.searchButtonAction('all', 1)}></span>
 						</div>
 					</div>
 				</header >
@@ -186,27 +202,27 @@ class HomePageComponent extends React.Component {
 								<div className="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
 									<button className="nav-link my-2 btn-lg active" id="v-pills-todos" data-bs-toggle="pill"
 										data-bs-target="#v-pills-home" type="button" role="tab"
-										aria-controls="v-pills-home" aria-selected="true" onClick={() => this.searchButtonAction('all')}>
+										aria-controls="v-pills-home" aria-selected="true" onClick={() => this.searchButtonAction('all', 1)}>
 										Todos
 									</button>
 									<button className="nav-link my-2 btn-lg" id="v-pills-imagenes" data-bs-toggle="pill" 
 										data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" 
-										aria-selected="false" onClick={() => this.searchButtonAction('imagenes')}>
+										aria-selected="false" onClick={() => this.searchButtonAction('imagenes', 1)}>
 										Imagenes
 									</button>
 									<button className="nav-link my-2 btn-lg" id="v-pills-videos" data-bs-toggle="pill"
 										data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" 
-										aria-selected="false" onClick={() => this.searchButtonAction('videos')}>
+										aria-selected="false" onClick={() => this.searchButtonAction('videos', 1)}>
 										Videos
 									</button>
 									<button className="nav-link my-2 btn-lg" id="v-pills-compras" data-bs-toggle="pill"
 										data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" 
-										aria-selected="false" onClick={() => this.searchButtonAction('compras')}>
+										aria-selected="false" onClick={() => this.searchButtonAction('compras', 1)}>
 										Compras
 									</button>
 									<button className="nav-link my-2 btn-lg" id="v-pills-documentos" data-bs-toggle="pill"
 										data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" 
-										aria-selected="false" onClick={() => this.searchButtonAction('documentos')}>
+										aria-selected="false" onClick={() => this.searchButtonAction('documentos', 1)}>
 										Documentos
 									</button>
 								</div>
@@ -214,6 +230,55 @@ class HomePageComponent extends React.Component {
 									<div className="tab-pane fade show active p-2" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
 										{this.state.results.length !== 0 ? <h5 className='my-4 mx-2 text-center'>{this.state.info}</h5> : <></>}
 										{this.showResults()}
+
+										{this.state.total !== 0 && this.state.type === 'imagenes' ?
+											<div className='my-3 d-flex justify-content-left align-items-center'>
+												<div className='d-flex flex-row'>
+													<div className='d-flex flex-column'>
+														<div
+															className={
+																this.state.page > 1
+																	? 'button btn btn-outline-danger'
+																	: 'button btn btn-outline-danger disabled'
+															}
+															onClick={
+																this.state.page > 1
+																	? () => this.searchButtonAction('imagenes', this.state.page-1)
+																	: null
+															}
+														>
+															Anterior
+														</div>
+													</div>
+													<div
+														className='d-flex flex-column'
+														style={{ paddingLeft: '10px' }}
+													>
+														<div
+															className={
+																this.state.page * 100 <
+																	this.state.total
+																	? 'button btn btn-outline-danger'
+																	: 'button btn btn-outline-danger disabled'
+															}
+															onClick={
+																this.state.page * 100 <
+																	this.state.total
+																	? () => this.searchButtonAction('imagenes', this.state.page+1)
+																	: null
+															}
+														>
+															Siguiente
+														</div>
+													</div>
+													<p className='mx-4 ml-3 pt-2'>
+														Página {this.state.page} de{' '}
+														{Math.ceil(this.state.total / 100)}
+													</p>
+												</div>
+											</div>
+											: <></>
+											}
 									</div>
 								</div>
 							</div>
