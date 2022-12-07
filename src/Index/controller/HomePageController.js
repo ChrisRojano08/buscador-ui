@@ -16,6 +16,9 @@ export class HomePageController {
 			case 'imagenes':
 				url = Urls.searchApi.images
 			break;
+			default:
+				url = Urls.searchApi.searching
+			break;
 		}
 
 		const respuesta = await fetch(url, {
